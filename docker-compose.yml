@@ -1,0 +1,21 @@
+version: '2'
+services:
+  waifu-sim-web:
+    build: .
+    expose:
+     - "8000"
+    ports:
+     - "8000:8000"
+    volumes:
+     - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: gunicorn -b 0.0.0.0:8000 app:api
+    depends_on:
+     - waifu-sim-db
+  waifu-sim-db:
+    image: postgres
+    volumes:
+      - /tmp/pg:/var/lib/postgresql/
+    environment:
+     - POSTGRES_USER=waifusim
+     - POSTGRES_PASSWORD=waifusim
