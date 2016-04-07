@@ -1,0 +1,3 @@
+{
+  "db_connection_string": "postgresext+pool://waifusim:waifusim@waifu-sim-db:5432/waifusim"
+}
