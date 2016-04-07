@@ -1,4 +1,5 @@
 falcon==0.3.0
 pillow
 gunicorn
+psycopg2
 peewee
