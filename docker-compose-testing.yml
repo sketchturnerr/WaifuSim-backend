@@ -1,0 +1,17 @@
+version: '2'
+services:
+  waifu-sim-db-testing:
+    image: postgres
+    environment:
+     - POSTGRES_USER=waifusim
+     - POSTGRES_PASSWORD=waifusim
+  waifu-sim-web-testing:
+    build: .
+    volumes:
+     - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: sh ./run_test.sh
+    environment:
+     - db_connection_string=postgresext+pool://waifusim:waifusim@waifu-sim-db-testing:5432/waifusim
+    depends_on:
+     - waifu-sim-db-testing
