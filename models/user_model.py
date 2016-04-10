@@ -7,6 +7,7 @@ from datetime import datetime
 from models.waifu_model import WaifuModel
 
 USER_ROLE_USER = 1
+USER_ROLE_MODERATOR = 2
 
 TOKEN_CHARS = string.ascii_uppercase+string.digits+string.ascii_lowercase
 

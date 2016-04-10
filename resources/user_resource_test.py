@@ -1,7 +1,9 @@
+import falcon
 from app import api
 from create_tables import create_tables
 from falcon.testing import TestCase
-from models.user_model import UserModel
+from models.user_model import UserModel, USER_ROLE_MODERATOR
+from resources.middlewares.auth import auth
 
 
 class UserResourceTest(TestCase):
@@ -43,3 +45,14 @@ class UserResourceTest(TestCase):
         resp = self.simulate_post('/user/auth', query_string="token=%s" % token)
         cookies = resp.headers.get('set-cookie', '')
         self.assertIn("token=%s" % token, cookies)
+
+    def test_auth_should_return_non_found(self):
+        class RestrictedResource(object):
+            @falcon.before(auth(USER_ROLE_MODERATOR))
+            def on_post(self, req, resp):
+                pass
+        self.api.add_route('/restricted', RestrictedResource())
+        user_resp = self.simulate_post('/user')
+        token = user_resp.json.get('token')
+        resp = self.simulate_post('/restricted', query_string="token=%s" % token)
+        self.assertEqual(resp.status_code, 404)

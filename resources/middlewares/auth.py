@@ -11,6 +11,7 @@ def set_auth_cookie(resp, token):
 def auth(required_role=USER_ROLE_USER):
 
     def hook(req, resp, resource, params):
+        #todo: hooks.py:151: DeprecationWarning:
         token = req.get_param('token')
         token = token or req.cookies.get('token')
         if token is None:
