@@ -1,10 +1,10 @@
 import random
 import string
 import hashlib
-from peewee import CharField, DateTimeField, IntegerField, ForeignKeyField
+
+from peewee import CharField, DateTimeField, IntegerField
 from models.base_model import BaseModel
 from datetime import datetime
-from models.waifu_model import WaifuModel
 
 USER_ROLE_USER = 1
 USER_ROLE_MODERATOR = 2
@@ -19,7 +19,6 @@ class UserModel(BaseModel):
     token_hash = CharField(max_length=128, null=False, index=True)
     registred_at = DateTimeField(null=False, default=datetime.now)
     role = IntegerField(null=False, default=USER_ROLE_USER)
-    waifu = ForeignKeyField(WaifuModel, related_name='users', null=True)
 
     @classmethod
     def generate_token_hash(cls, token):
