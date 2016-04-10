@@ -25,3 +25,16 @@ class WaifuModel(BaseModel):
         json = super(WaifuModel, self).to_json()
         json['users_count'] = self.users.count()
         return json
+
+    @classmethod
+    def get_by_id_and_user(cls, id, user):
+        try:
+            waifu = cls.get(
+                (cls.id == id) &
+                ((cls.owner == user) |
+                 (cls.sharing_status == WAIFU_SHARING_STATUS_PUBLIC))
+            )
+        except ValueError:
+            # id не int, что ж, у нас явно нет такого документа.
+            return None
+        return waifu
