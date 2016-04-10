@@ -1,5 +1,7 @@
 # WaifuSim-backend
-
+## Как развернуть
+`docker-compose up -d` - запуск в демон-режиме.
+`docker-compose -f docker-compose-testing.yml up` - запустить тесты. Если поменялась структура базы, то перед этим нужно удалить контейнеры `docker-compose -f docker-compose-testing.yml rm -f` потом придумаю, как без этого обойтись.
 ## Api
 ### [Формат ошибок](#errors-format)
 `{"title": <код ошибки>, "description": <человекопонятное описание>, "link": <ссылка на эту документацию>}`
