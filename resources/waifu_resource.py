@@ -26,15 +26,7 @@ class WaifuResource(object):
 
     @falcon.before(auth())
     def on_get(self, req, resp, id):
-        try:
-            waifu = WaifuModel.get(
-                (WaifuModel.id == id) &
-                ((WaifuModel.owner == req.context['user']) |
-                 (WaifuModel.sharing_status == WAIFU_SHARING_STATUS_PUBLIC))
-            )
-        except ValueError:
-            # id не int, что ж, у нас явно нет такого документа.
-            raise falcon.HTTPNotFound()
+        waifu = WaifuModel.get_by_id_and_user(id, req.context['user'])
         resp.body = json.dumps(waifu.to_json())
 
     @falcon.before(auth())
