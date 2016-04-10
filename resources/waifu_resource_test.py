@@ -6,16 +6,7 @@ from create_tables import create_tables
 from falcon.testing import TestCase
 from models.base_model import db
 from models.waifu_model import WaifuModel, WAIFU_SHARING_STATUS_PUBLIC
-
-
-def with_token_query_string(func):
-
-    def wrapper(self):
-        resp = self.simulate_post('/user')
-        token = resp.json.get('token')
-        return func(self, "token=%s" % token)
-
-    return wrapper
+from utils.test_utils import with_token_query_string
 
 
 class WaifuResourceTest(TestCase):
