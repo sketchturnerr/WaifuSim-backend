@@ -11,7 +11,7 @@ def create_tables():
         WaifuModel,
         WaifuMessageModel,
     ), True)
-    db.manual_close()
 
 if __name__ == '__main__':
     create_tables()
+    db.manual_close()
