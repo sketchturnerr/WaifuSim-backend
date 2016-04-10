@@ -6,7 +6,7 @@ from create_tables import create_tables
 from falcon.testing import TestCase
 from models.base_model import db
 from models.waifu_model import WaifuModel, WAIFU_SHARING_STATUS_PUBLIC
-from utils.test_utils import with_token_query_string
+from utils.test_utils import with_token_query_string, create_waifu
 
 
 class WaifuResourceTest(TestCase):
@@ -17,11 +17,6 @@ class WaifuResourceTest(TestCase):
     @classmethod
     def setUpClass(cls):
         create_tables()
-
-    def _create_waifu(self, token_qs):
-        body = json.dumps({'name': 'foo', 'description': 'bar', 'pic': 'baz'})
-        resp = self.simulate_post('/waifu', query_string=token_qs, body=body)
-        return resp.json.get('id'), body
 
     @with_token_query_string
     def test_create_waifu_should_return_bad_request(self, token_qs):
@@ -51,7 +46,7 @@ class WaifuResourceTest(TestCase):
 
     @with_token_query_string
     def test_update_waifu_should_return_not_found_for_waifu_owned_by_another_user(self, token_qs):
-        id, body = self._create_waifu(token_qs)
+        id, body = create_waifu(self, token_qs)
         resp = self.simulate_post('/user')
         token = resp.json.get('token')
         resp = self.simulate_put("/waifu/%s" % id, query_string="token=%s" % token, body=body)
@@ -59,7 +54,7 @@ class WaifuResourceTest(TestCase):
 
     @with_token_query_string
     def test_update_waifu_should_update_and_return_waifu(self, token_qs):
-        id, _ = self._create_waifu(token_qs)
+        id, _ = create_waifu(self, token_qs)
         body = json.dumps({'name': 'foo1', 'description': 'bar1', 'pic': 'baz1'})
         sleep(2)
         resp = self.simulate_put("/waifu/%s" % id, query_string=token_qs, body=body)
@@ -75,7 +70,7 @@ class WaifuResourceTest(TestCase):
 
     @with_token_query_string
     def test_get_waifu_should_return_not_found_for_non_public_waifu(self, token_qs):
-        id, _ = self._create_waifu(token_qs)
+        id, _ = create_waifu(self, token_qs)
         resp = self.simulate_post('/user')
         token = resp.json.get('token')
         resp = self.simulate_get("/waifu/%s" % id, query_string="token=%s" % token)
@@ -83,13 +78,13 @@ class WaifuResourceTest(TestCase):
 
     @with_token_query_string
     def test_get_waifu_should_return_waifu_object_for_owner(self, token_qs):
-        id, _ = self._create_waifu(token_qs)
+        id, _ = create_waifu(self, token_qs)
         resp = self.simulate_get("/waifu/%s" % id, query_string=token_qs)
         self.assertEqual(resp.json.get('id'), id)
 
     @with_token_query_string
     def test_get_waifu_should_return_waifu_object_for_oublic_waifu(self, token_qs):
-        id, _ = self._create_waifu(token_qs)
+        id, _ = create_waifu(self, token_qs)
         with db.atomic():
             waifu = WaifuModel.get(WaifuModel.id == id)
             waifu.sharing_status = WAIFU_SHARING_STATUS_PUBLIC
