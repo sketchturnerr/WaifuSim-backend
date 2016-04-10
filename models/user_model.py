@@ -6,9 +6,10 @@ from models.base_model import BaseModel
 from datetime import datetime
 from models.waifu_model import WaifuModel
 
-USER_ROLE_ORDINAR = 1
+USER_ROLE_USER = 1
 
 TOKEN_CHARS = string.ascii_uppercase+string.digits+string.ascii_lowercase
+
 
 class UserModel(BaseModel):
     class Meta:
@@ -16,7 +17,7 @@ class UserModel(BaseModel):
 
     token_hash = CharField(max_length=128, null=False, index=True)
     registred_at = DateTimeField(null=False, default=datetime.now)
-    role = IntegerField(null=False, default=USER_ROLE_ORDINAR)
+    role = IntegerField(null=False, default=USER_ROLE_USER)
     waifu = ForeignKeyField(WaifuModel, related_name='users', null=True)
 
     @classmethod

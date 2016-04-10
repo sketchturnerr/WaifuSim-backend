@@ -1,14 +1,14 @@
 from conf import Conf
 import falcon
 from peewee import DoesNotExist
-from models.user_model import UserModel, USER_ROLE_ORDINAR
+from models.user_model import UserModel, USER_ROLE_USER
 
 
 def set_auth_cookie(resp, token):
     resp.set_cookie('token', token, max_age=Conf.get('max_auth_cookie_age', 86400*15))
 
 
-def auth(required_role=USER_ROLE_ORDINAR):
+def auth(required_role=USER_ROLE_USER):
 
     def hook(req, resp, resource, params):
         token = req.get_param('token')
