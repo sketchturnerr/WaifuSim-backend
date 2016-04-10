@@ -8,6 +8,8 @@ from models.waifu_model import WaifuModel
 
 USER_ROLE_ORDINAR = 1
 
+TOKEN_CHARS = string.ascii_uppercase+string.digits+string.ascii_lowercase
+
 class UserModel(BaseModel):
     class Meta:
         db_table = 'users'
@@ -15,9 +17,13 @@ class UserModel(BaseModel):
     token_hash = CharField(max_length=128, null=False, index=True)
     registred_at = DateTimeField(null=False, default=datetime.now)
     role = IntegerField(null=False, default=USER_ROLE_ORDINAR)
-    waifu = ForeignKeyField(WaifuModel, related_name='users')
+    waifu = ForeignKeyField(WaifuModel, related_name='users', null=True)
 
-    def generate_token(self):
-        token = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in xrange(16))
-        self.token_hash = hashlib.sha512(token)
+    @classmethod
+    def generate_token_hash(cls, token):
+        return hashlib.sha512(token.encode('utf-8')).hexdigest()
+
+    def update_token(self):
+        token = ''.join(random.choice(TOKEN_CHARS) for _ in range(16))
+        self.token_hash = self.generate_token_hash(token)
         return token
