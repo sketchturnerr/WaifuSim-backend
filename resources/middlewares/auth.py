@@ -18,14 +18,14 @@ def auth(required_role=USER_ROLE_USER):
             raise falcon.HTTPUnauthorized(
                 'Auth token required',
                 'Тут нужна кука или quary-параметр `token`, анончик.', False,
-                href='https://github.com/sketchturnerr/WaifuSim-backend/new/master#auth')
+                href='https://github.com/sketchturnerr/WaifuSim-backend#auth')
         try:
             user = UserModel.get(UserModel.token_hash == UserModel.generate_token_hash(token))
         except DoesNotExist:
             raise falcon.HTTPUnauthorized(
                 'Invalid token',
                 'У тебя невалидный токен, няша :C', False,
-                href='https://github.com/sketchturnerr/WaifuSim-backend/new/master#auth')
+                href='https://github.com/sketchturnerr/WaifuSim-backend#auth')
         if user.role < required_role:
             raise falcon.HTTPNotFound()
         req.context['user'] = user
