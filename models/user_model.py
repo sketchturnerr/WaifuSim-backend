@@ -1,10 +1,9 @@
+import hashlib
 import random
 import string
-import hashlib
-
-from peewee import CharField, DateTimeField, IntegerField
-from models.base_model import BaseModel
 from datetime import datetime
+from models.base_model import BaseModel
+from peewee import CharField, DateTimeField, IntegerField
 
 USER_ROLE_USER = 1
 USER_ROLE_MODERATOR = 2
