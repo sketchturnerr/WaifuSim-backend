@@ -20,3 +20,8 @@ class WaifuModel(BaseModel):
     rating = IntegerField(null=False, default=0)
     sharing_status = IntegerField(null=False, default=WAIFU_SHARING_STATUS_PRIVATE)
     owner = ForeignKeyField(UserModel, related_name='waifus_created_by_me')
+
+    def to_json(self):
+        json = super(WaifuModel, self).to_json()
+        json['users_count'] = self.users.count()
+        return json
