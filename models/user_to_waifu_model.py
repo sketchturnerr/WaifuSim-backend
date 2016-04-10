@@ -10,6 +10,6 @@ class UserToWaifuModel(BaseModel):
         db_table = 'users_to_waifus'
         primary_key = CompositeKey('user', 'waifu')
 
-    user = ForeignKeyField(UserModel)
-    waifu = ForeignKeyField(WaifuModel)
+    user = ForeignKeyField(UserModel, related_name='waifus')
+    waifu = ForeignKeyField(WaifuModel, related_name='users')
     created_at = DateTimeField(null=False, default=datetime.now)
