@@ -5,7 +5,7 @@ from resources.user_resource import UserResource, UserAuthResource
 from resources.user_waifu_resource import UserWaifuResource
 from resources.waifu_message_resource import WaifuMessageResource
 from resources.waifu_resource import WaifuResource, WaifuCollectionResource
-from waifu_share_resource import WaifuShareResource
+from resources.waifu_share_resource import WaifuShareResource
 
 api = falcon.API()
 
